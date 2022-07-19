@@ -1,0 +1,14 @@
+#1. compilare / pregatirea aplicatiei
+FROM maven:3 as building-app
+WORKDIR app
+
+ADD src src
+ADD pom.xml pom.xml
+RUN mvn package
+
+#2. run application
+FROM eclipse-temurin:17-jre
+WORKDIR app
+COPY --from=building-app /app/target/curs10.jar application.jar
+
+CMD java -jar application.jar
